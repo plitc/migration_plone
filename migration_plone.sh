@@ -44,7 +44,7 @@ TARGETSNAPSHOTSUFFIX=""
 
 #// variables (generic purpose)
 OSVERSION=$(uname)
-if [ "$OSVERSION" = "freebsd" ]; then :; else echo "[ERROR] Plattform = unknown"; exit 1; fi
+if [ "$OSVERSION" = "FreeBSD" ]; then :; else echo "[ERROR] Plattform = unknown"; exit 1; fi
 FREENAS=$(uname -a | grep -c "ixsystems.com")
 JAILED=$(sysctl -a | grep -c "security.jail.jailed: 1")
 MYNAME=$(whoami)
