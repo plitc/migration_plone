@@ -216,7 +216,7 @@ printf "\033[1;31mMigration for Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 #
 ### // stage1 ###
-;;
+   ;;
 *)
 printf "\033[1;31mWARNING: migration_plone is experimental and its not ready for production. Do it at your own risk.\033[0m\n"
 echo "" # usage
