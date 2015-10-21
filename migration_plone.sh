@@ -86,7 +86,7 @@ spinner()
 
 #// function: cleanup tmp
 cleanup(){
-   rm -rf /tmp/easy_dtrace*
+   rm -rf /tmp/migration_plone*
 }
 
 #// function: pkg installation
@@ -182,6 +182,12 @@ show(){
 jailid(){
    jls | grep "$SOURCEJAIL" | awk '{print $1}'
 }
+
+#// function: jail match
+jailmatch(){
+   MATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}')
+   zfs list | grep -w "$MATCH" | awk '{print $1}'
+}
 #
 ### // stage0 ###
 
@@ -195,9 +201,15 @@ case "$1" in
 
 #/ stop plone
 show "stop plone for: $SOURCEJAIL"
-show "$(jailid)"
-#/ pkg install: ksh93
-#(pkginstall ksh93) & spinner $!
+jexec "$(jailid)" /usr/local/etc/rc.d/plone stop
+jexec "$(jailid)" /bin/sync
+
+show "zfs snapshot for: $SOURCEJAIL"
+zfs snapshot "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
+
+show "start plone for: $SOURCEJAIL"
+jexec "$(jailid)" /usr/local/etc/rc.d/plone start
+jexec "$(jailid)" /bin/sync
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
