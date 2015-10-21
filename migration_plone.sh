@@ -171,19 +171,24 @@ show(){
    printf "\033[1;33m%s\033[0m\n" "$@"
 }
 
-#// function: jail id
-jailid(){
+#// function: source jail id
+sjailid(){
    jls | grep "$SOURCEJAIL" | awk '{print $1}'
 }
 
-#// function: jail match
-jailmatch(){
-   MATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}')
-   zfs list | grep -w "$MATCH" | awk '{print $1}'
+#// function: source jail match
+sjailmatch(){
+   SMATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}')
+   zfs list | grep -w "$SMATCH" | awk '{print $1}'
 }
 
-#// function: jail target match
-jailtmatch(){
+#// function: target jail id
+tjailid(){
+   jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $1}'
+}
+
+#// function: target jail match
+tjailmatch(){
    TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}')
    zfs list | grep -w "$TMATCH" | grep -E '(^| )'"$TMATCH"'( |$)' | awk '{print $1}'
 }
@@ -212,18 +217,18 @@ case "$1" in
 
 #/ stop (old) plone
 show "stop plone for: $SOURCEJAIL"
-jexec "$(jailid)" /usr/local/etc/rc.d/plone stop
-jexec "$(jailid)" /bin/sync
+jexec "$(sjailid)" /usr/local/etc/rc.d/plone stop
+jexec "$(sjailid)" /bin/sync
 (sleep 2) & spinner $!
 
 #/ take snapshot
 show "zfs snapshot for: $SOURCEJAIL"
-zfs snapshot "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
+zfs snapshot "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
 
 #/ start (old) plone
 show "start plone for: $SOURCEJAIL"
-jexec "$(jailid)" /usr/local/etc/rc.d/plone start
-jexec "$(jailid)" /bin/sync
+jexec "$(sjailid)" /usr/local/etc/rc.d/plone start
+jexec "$(sjailid)" /bin/sync
 (sleep 2) & spinner $!
 
 #/ prepare zfs send & receive
@@ -234,8 +239,8 @@ checkping "$TARGETHOST"
 
 #/ zfs send & receive
 show "enter the password for the remote host zfs send & receive transmission"
-#/zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv -F "$TARGETZFSRECEIVE"
-zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
+#/zfs send "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv -F "$TARGETZFSRECEIVE"
+zfs send "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
 if [ $? -eq 0 ]
 then
    : # dummy
@@ -264,7 +269,11 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 
 #/ do rollback
 show "zfs rollback for: $TARGETJAIL"
-zfs rollback "$(jailtmatch)"@"$TARGETZFSROLLBACK"
+zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
+
+jexec "$(tjailid)" /bin/hostname
+
+
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
