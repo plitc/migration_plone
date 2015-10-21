@@ -282,6 +282,10 @@ show "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
 (sleep 2) & spinner $!
 
+#/ install plone
+show "install plone for: $TARGETJAIL"
+jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
+
 
 
 ### ### ### ### ### ### ### ### ###
