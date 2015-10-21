@@ -34,13 +34,14 @@
 #
 #// variables - source jail
 SOURCEHOST="freebsd"
-SOURCEJAIL=""
-SOURCESNAPSHOTSUFFIX=""
+SOURCEJAIL="srs1"
+SOURCESNAPSHOTSUFFIX="_MIGRATION_"
 
 #// variables - target jail
 TARGETHOST="freenas"
-TARGETJAIL=""
-TARGETSNAPSHOTSUFFIX=""
+TARGETJAIL="plone"
+TARGETSNAPSHOTSUFFIX="_MIGRATION_"
+TARGETPACKAGE=""
 
 #// variables (generic purpose)
 OSVERSION=$(uname)
@@ -171,7 +172,11 @@ if [ -z "$@" ]; then
    exit 1
 fi
 }
-#
+
+#// function: show shell info
+show(){
+   printf "\033[1;33m%s\033[0m\n" "$@"
+}
 ### // stage0 ###
 
 case "$1" in
@@ -182,6 +187,7 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
+show test
 #/ pkg install: ksh93
 #(pkginstall ksh93) & spinner $!
 
