@@ -34,7 +34,7 @@
 #
 #// variables - source jail
 SOURCEHOST="freebsd"
-SOURCEJAIL="srs1"
+SOURCEJAIL="srs1.stura.htw-dresden.de"
 SOURCESNAPSHOTSUFFIX="_MIGRATION_"
 
 #// variables - target jail
@@ -177,6 +177,12 @@ fi
 show(){
    printf "\033[1;33m%s\033[0m\n" "$@"
 }
+
+#// function: jail id
+jailid(){
+   jls | grep "$SOURCEJAIL" | awk '{print $1}'
+}
+#
 ### // stage0 ###
 
 case "$1" in
@@ -187,7 +193,9 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
-show "test 123"
+#/ stop plone
+
+show "$jailid"
 #/ pkg install: ksh93
 #(pkginstall ksh93) & spinner $!
 
