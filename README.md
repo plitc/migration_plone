@@ -17,7 +17,7 @@ Platform
 Usage
 =====
 ```
-    # ./migration_plone.sh
+    # ./migration_plone.sh { source | target }
 ```
 
 Screencast
