@@ -223,6 +223,7 @@ jexec "$(jailid)" /bin/sync
 #/ prepare zfs send & receive
 echo "" # dummy
 echo "ping test to remote host: $TARGETHOST"
+echo "" # dummy
 checkping "$TARGETHOST"
 
 #/ zfs send & receive
@@ -243,7 +244,7 @@ fi
 cleanup
 ### ### ### ### ### ### ### ### ###
 echo "" # printf
-printf "\033[1;31mMigration for Plone finished.\033[0m\n"
+printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 #
 ### // stage1 ###
@@ -264,7 +265,7 @@ printf "\033[1;31mMigration for Plone finished.\033[0m\n"
 cleanup
 ### ### ### ### ### ### ### ### ###
 echo "" # printf
-printf "\033[1;31mMigration for Plone finished.\033[0m\n"
+printf "\033[1;31mMigration for (target) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 #
 ### // stage1 ###
