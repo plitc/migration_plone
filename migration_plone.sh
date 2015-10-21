@@ -182,6 +182,12 @@ jailmatch(){
    zfs list | grep -w "$MATCH" | awk '{print $1}'
 }
 
+#// function: jail target match
+jailtmatch(){
+   TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )"$TARGETJAIL"( |$)')
+   echo "$TMATCH"
+}
+
 #// function: check ping
 checkping(){
    ping -q -c5 "$@" > /dev/null
@@ -256,8 +262,9 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
-#/ pkg install: ksh93
-#(pkginstall ksh93) & spinner $!
+show "$(jailtmatch)"
+
+
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
