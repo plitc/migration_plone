@@ -223,7 +223,7 @@ show "ping test to remote host: $TARGETHOST"
 checkping "$TARGETHOST"
 
 #/ zfs send & receive
-show "enter the password for the remote host zfs send & receive"
+show "enter the password for the remote host zfs send & receive transmission"
 zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
 
 ### ### ### ### ### ### ### ### ###
