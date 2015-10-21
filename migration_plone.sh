@@ -184,7 +184,7 @@ jailmatch(){
 
 #// function: jail target match
 jailtmatch(){
-   TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )"$TARGETJAIL"( |$)')
+   TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)')
    echo "$TMATCH"
 }
 
