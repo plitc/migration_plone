@@ -35,12 +35,12 @@
 ADIR="$PWD"
 #
 #// include settings config
-if [ -e "$ADIR"/config/settings.conf ]; then :; else echo "[ERROR] can't find config/settings.conf"; exit 1; fi
+if [ -e "$ADIR"/config/settings.conf ]; then :; else printf "\033[1;32mERROR: can't find config/settings.conf!\033[0m\n"; exit 1; fi
 . "$ADIR"/config/settings.conf
 #
 #// variables (generic purpose)
 OSVERSION=$(uname)
-if [ "$OSVERSION" = "FreeBSD" ]; then :; else echo "[ERROR] Plattform = unknown"; exit 1; fi
+if [ "$OSVERSION" = "FreeBSD" ]; then :; else printf "\033[1;32mERROR: Plattform = unknown\033[0m\n"; exit 1; fi
 FREENAS=$(uname -a | grep -c "ixsystems.com")
 JAILED=$(sysctl -a | grep -c "security.jail.jailed: 1")
 MYNAME=$(whoami)
@@ -98,7 +98,8 @@ packageinstall(){
          then
             : # dummy
          else
-            echo "[ERROR] something went wrong, can't install the package"
+            #/echo "[ERROR] something went wrong, can't install the package"
+            printf "\033[1;32mERROR: something went wrong, can't install the package!\033[0m\n"
             exit 1
          fi
       else
@@ -107,7 +108,8 @@ packageinstall(){
          then
             : # dummy
          else
-            echo "[ERROR] something went wrong, can't install the package"
+            #/echo "[ERROR] something went wrong, can't install the package"
+            printf "\033[1;32mERROR: something went wrong, can't install the package!\033[0m\n"
             exit 1
          fi
          GETPATH=$(find /usr/ports -maxdepth 2 -mindepth 2 -name "$@" | tail -n 1)
@@ -116,7 +118,8 @@ packageinstall(){
          then
             : # dummy
          else
-            echo "[ERROR] something went wrong, can't install the package"
+            #/echo "[ERROR] something went wrong, can't install the package"
+            printf "\033[1;32mERROR: something went wrong, can't install the package!\033[0m\n"
             exit 1
          fi
       fi
@@ -131,7 +134,8 @@ if [ "$MYNAME" = "root" ]
 then
    : # dummy
 else
-   echo "[ERROR] You must be root to run this script"
+   #/echo "[ERROR] You must be root to run this script"
+   printf "\033[1;32mERROR: You must be root to run this script!\033[0m\n"
    exit 1
 fi
 }
@@ -142,7 +146,8 @@ if [ "$JAILED" = "0" ]
 then
    : # dummy
 else
-   echo "[ERROR] Run this script on the FreeBSD HOST"
+   #/echo "[ERROR] Run this script on the FreeBSD HOST"
+   printf "\033[1;32mERROR: Run this script on the FreeBSD HOST!\033[0m\n"
    exit 1
 fi
 }
@@ -151,7 +156,8 @@ fi
 checkfreenas(){
 if [ "$FREENAS" = "1" ]
 then
-   echo "[ERROR] FreeBSD only support"
+   #/echo "[ERROR] FreeBSD only support"
+   printf "\033[1;32mERROR: FreeBSD only support!\033[0m\n"
    exit 1
 else
    : # dummy
@@ -161,7 +167,8 @@ fi
 #// function: check read
 checkread(){
 if [ -z "$@" ]; then
-   echo "[ERROR] nothing selected"
+   #/echo "[ERROR] nothing selected"
+   printf "\033[1;32mERROR: nothing selected!\033[0m\n"
    exit 1
 fi
 }
@@ -203,7 +210,8 @@ checkping(){
    then
       : # dummy
    else
-      echo "[ERROR] server isn't responsive!"
+      #/echo "[ERROR] server isn't responsive!"
+      printf "\033[1;32mERROR: server isn't responsive!\033[0m\n"
       exit 1
    fi
 }
@@ -215,7 +223,8 @@ checkzfsrecv(){
    then
       : # dummy
    else
-      echo "[ERROR] please wait until the zfs send & receive transfer is complete"
+      #/echo "[ERROR] please wait until the zfs send & receive transfer is complete"
+      printf "\033[1;32mERROR: Please wait until the zfs send & receive transfer is complete!\033[0m\n"
       exit 1
    fi
 }
@@ -262,7 +271,8 @@ if [ $? -eq 0 ]
 then
    : # dummy
 else
-   echo "[ERROR] zfs send & receive failed!"
+   #/echo "[ERROR] zfs send & receive failed!"
+   printf "\033[1;32mERROR: zfs send & receive failed!\033[0m\n"
    exit 1
 fi
 (sleep 2) & spinner $!
