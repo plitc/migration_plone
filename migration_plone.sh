@@ -195,7 +195,7 @@ case "$1" in
 
 #/ stop plone
 
-show "$jailid"
+show "$(jailid)"
 #/ pkg install: ksh93
 #(pkginstall ksh93) & spinner $!
 
