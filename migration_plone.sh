@@ -271,7 +271,10 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 show "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
 
-jexec "$(tjailid)" /bin/hostname
+#/ jail (base) upgrade
+jexec "$(tjailid)" pkg update -y
+(sleep 2) & spinner $!
+jexec "$(tjailid)" pkg upgrade -y
 
 
 
