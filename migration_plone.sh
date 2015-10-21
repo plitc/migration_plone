@@ -273,7 +273,7 @@ fi
 cleanup
 ### ### ### ### ### ### ### ### ###
 echo "" # printf
-printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
+printf "\033[1;32mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 #
 ### // stage1 ###
@@ -318,7 +318,7 @@ jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
 cleanup
 ### ### ### ### ### ### ### ### ###
 echo "" # printf
-printf "\033[1;31mMigration for (target) Plone finished.\033[0m\n"
+printf "\033[1;32mMigration for (target) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 #
 ### // stage1 ###
