@@ -275,10 +275,12 @@ show "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
 
 #/ jail (base) upgrade
-show "jail upgrade for: $TARGETJAIL"
+show "jail update for: $TARGETJAIL"
 jexec "$(tjailid)" pkg update
 (sleep 2) & spinner $!
+show "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
+(sleep 2) & spinner $!
 
 
 
