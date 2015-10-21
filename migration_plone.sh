@@ -35,7 +35,7 @@
 ADIR="$PWD"
 #
 #// include settings config
-. "$ADIR"/settings.conf
+. "$ADIR"/config/settings.conf
 #
 #// variables (generic purpose)
 OSVERSION=$(uname)

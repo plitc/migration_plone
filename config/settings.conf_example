@@ -1,0 +1,12 @@
+
+#// variables - source jail
+SOURCEHOST="freebsd"
+SOURCEJAIL="oldplone"
+SOURCESNAPSHOTSUFFIX="_MIGRATION_"
+
+#// variables - target jail
+TARGETHOST="freenas"
+TARGETJAIL="newplone"
+TARGETSNAPSHOTSUFFIX="_MIGRATION_"
+TARGETPACKAGE=""
+
