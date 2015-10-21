@@ -199,14 +199,16 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
-#/ stop plone
+#/ stop (old) plone
 show "stop plone for: $SOURCEJAIL"
 jexec "$(jailid)" /usr/local/etc/rc.d/plone stop
 jexec "$(jailid)" /bin/sync
 
+#/ take snapshot
 show "zfs snapshot for: $SOURCEJAIL"
 zfs snapshot "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
 
+#/ start (old) plone
 show "start plone for: $SOURCEJAIL"
 jexec "$(jailid)" /usr/local/etc/rc.d/plone start
 jexec "$(jailid)" /bin/sync
