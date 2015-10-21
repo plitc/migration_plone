@@ -218,9 +218,11 @@ zfs snapshot "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
 show "start plone for: $SOURCEJAIL"
 jexec "$(jailid)" /usr/local/etc/rc.d/plone start
 jexec "$(jailid)" /bin/sync
+(sleep 2) & spinner $!
 
 #/ prepare zfs send & receive
-show "ping test to remote host: $TARGETHOST"
+echo "" # dummy
+echo "ping test to remote host: $TARGETHOST"
 checkping "$TARGETHOST"
 
 #/ zfs send & receive
