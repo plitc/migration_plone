@@ -35,6 +35,7 @@
 ADIR="$PWD"
 #
 #// include settings config
+if [ -e "$ADIR"/config/settings.conf ]; then :; else echo "[ERROR] can't find settings.conf"; exit 1; fi
 . "$ADIR"/config/settings.conf
 #
 #// variables (generic purpose)
