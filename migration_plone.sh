@@ -35,7 +35,7 @@
 ADIR="$PWD"
 #
 #// include settings config
-if [ -e "$ADIR"/config/settings.conf ]; then :; else echo "[ERROR] can't find settings.conf"; exit 1; fi
+if [ -e "$ADIR"/config/settings.conf ]; then :; else echo "[ERROR] can't find config/settings.conf"; exit 1; fi
 . "$ADIR"/config/settings.conf
 #
 #// variables (generic purpose)
@@ -181,6 +181,18 @@ jailmatch(){
    MATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}')
    zfs list | grep -w "$MATCH" | awk '{print $1}'
 }
+
+#// function: check ping
+checkping(){
+   ping -q -c5 "$@" > /dev/null
+   if [ $? -eq 0 ]
+   then
+      : # dummy
+   else
+      echo "[ERROR] server isn't responsive!"
+      exit 1
+   fi
+}
 #
 ### // stage0 ###
 
@@ -205,6 +217,14 @@ zfs snapshot "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
 show "start plone for: $SOURCEJAIL"
 jexec "$(jailid)" /usr/local/etc/rc.d/plone start
 jexec "$(jailid)" /bin/sync
+
+#/ prepare zfs send & receive
+show "ping test to remote host: $TARGETHOST"
+checkping "$TARGETHOST"
+
+#/ zfs send & receive
+show "enter the password for the remote host zfs send & receive"
+zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
