@@ -1,7 +1,7 @@
 
 #// variables - source jail
 SOURCEHOST="freebsd"
-SOURCEJAIL="srs1.stura.htw-dresden.de"
+SOURCEJAIL="srs1"
 SOURCESNAPSHOTSUFFIX="_MIGRATION_"
 
 #// variables - target jail
