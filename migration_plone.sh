@@ -187,7 +187,7 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
-show test
+show "test 123"
 #/ pkg install: ksh93
 #(pkginstall ksh93) & spinner $!
 
