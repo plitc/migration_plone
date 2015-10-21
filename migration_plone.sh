@@ -207,6 +207,13 @@ checkping(){
       exit 1
    fi
 }
+
+#// function: check zfs recv
+checkzfsrecv(){
+   CHECKZFSRECV=$(ps -ax | grep "zfs recv [$TARGETZFSRECEIVE]")
+   echo "$CHECKZFSRECV"
+   exit 1
+}
 #
 ### // stage0 ###
 
@@ -272,6 +279,10 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
+
+#/ check zfs send & receive transmission
+checkzfsrecv
+(sleep 2) & spinner $!
 
 #/ do rollback
 show "zfs rollback for: $TARGETJAIL"
