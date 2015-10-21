@@ -32,17 +32,11 @@
 
 ### stage0 // ###
 #
-#// variables - source jail
-SOURCEHOST="freebsd"
-SOURCEJAIL="srs1.stura.htw-dresden.de"
-SOURCESNAPSHOTSUFFIX="_MIGRATION_"
-
-#// variables - target jail
-TARGETHOST="freenas"
-TARGETJAIL="plone"
-TARGETSNAPSHOTSUFFIX="_MIGRATION_"
-TARGETPACKAGE=""
-
+ADIR="$PWD"
+#
+#// include config
+. "$ADIR"/config
+#
 #// variables (generic purpose)
 OSVERSION=$(uname)
 if [ "$OSVERSION" = "FreeBSD" ]; then :; else echo "[ERROR] Plattform = unknown"; exit 1; fi
@@ -65,8 +59,6 @@ do
    PRG=$(readlink "$PRG")
 done
 DIR=$(dirname "$PRG")
-
-ADIR="$PWD"
 
 #// function: spinner
 spinner()
