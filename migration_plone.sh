@@ -227,6 +227,7 @@ jexec "$(sjailid)" /bin/sync
 #/ take snapshot
 show "zfs snapshot for: $SOURCEJAIL"
 zfs snapshot "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
+(sleep 2) & spinner $!
 
 #/ start (old) plone
 show "start plone for: $SOURCEJAIL"
@@ -239,6 +240,7 @@ echo "" # dummy
 echo "ping test to remote host: $TARGETHOST"
 echo "" # dummy
 checkping "$TARGETHOST"
+(sleep 2) & spinner $!
 
 #/ zfs send & receive
 show "enter the password for the remote host zfs send & receive transmission"
@@ -251,6 +253,7 @@ else
    echo "[ERROR] zfs send & receive failed!"
    exit 1
 fi
+(sleep 2) & spinner $!
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
@@ -273,11 +276,14 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 #/ do rollback
 show "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
+(sleep 2) & spinner $!
 
-#/ jail (base) upgrade
+#/ jail (base) update
 show "jail update for: $TARGETJAIL"
 jexec "$(tjailid)" pkg update
 (sleep 2) & spinner $!
+
+#/ jail (base) upgrade
 show "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
 (sleep 2) & spinner $!
@@ -285,6 +291,7 @@ jexec "$(tjailid)" pkg upgrade -y
 #/ install plone
 show "install plone for: $TARGETJAIL"
 jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
+(sleep 2) & spinner $!
 
 
 
