@@ -173,13 +173,16 @@ show(){
 
 #// function: source jail id
 sjailid(){
-   jls | grep "$SOURCEJAIL" | awk '{print $1}'
+   #/jls | grep "$SOURCEJAIL" | awk '{print $1}' # dirty
+   jls | grep -w "$SOURCEJAIL" | grep -E '(^| )'"$SOURCEJAIL"'( |$)' | awk '{print $1}'
 }
 
 #// function: source jail match
 sjailmatch(){
-   SMATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}')
-   zfs list | grep -w "$SMATCH" | awk '{print $1}'
+   #/SMATCH=$(jls | grep "$SOURCEJAIL" | awk '{print $4}') # dirty
+   #/zfs list | grep -w "$SMATCH" | awk '{print $1}' # dirty
+   SMATCH=$(jls | grep -w "$SOURCEJAIL" | grep -E '(^| )'"$SOURCEJAIL"'( |$)' | awk '{print $4}')
+   zfs list | grep -w "$SMATCH" | grep -E '(^| )'"$SMATCH"'( |$)' | awk '{print $1}'
 }
 
 #// function: target jail id
@@ -272,6 +275,7 @@ show "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
 
 #/ jail (base) upgrade
+show "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg update
 (sleep 2) & spinner $!
 jexec "$(tjailid)" pkg upgrade -y
