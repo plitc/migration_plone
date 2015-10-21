@@ -263,7 +263,7 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 
 #/ do rollback
-show "zfs rollback for: $SOURCEJAIL"
+show "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(jailtmatch)"@"$TARGETZFSROLLBACK"
 
 ### ### ### ### ### ### ### ### ###
