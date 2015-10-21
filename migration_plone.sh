@@ -184,8 +184,8 @@ jailmatch(){
 
 #// function: jail target match
 jailtmatch(){
-   TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)')
-   echo "$TMATCH"
+   TMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}')
+   zfs list | grep -w "$TMATCH" | grep -E '(^| )'"$TMATCH"'( |$)' | awk '{print $1}'
 }
 
 #// function: check ping
@@ -262,7 +262,7 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
-jailtmatch
+show "$(jailtmatch)"
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
