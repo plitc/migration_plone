@@ -210,9 +210,14 @@ checkping(){
 
 #// function: check zfs recv
 checkzfsrecv(){
-   CHECKZFSRECV=$(ps -ax | grep "zfs recv [$TARGETZFSRECEIVE]")
-   echo "$CHECKZFSRECV"
-   exit 1
+   CHECKZFSRECV=$(ps -ax | grep -c "zfs recv [$TARGETZFSRECEIVE]")
+   if [ "$CHECKZFSRECV" = "0" ]
+   then
+      : # dummy
+   else
+      echo "[ERROR] please wait until the zfs send & receive transfer is complete"
+      exit 1
+   fi
 }
 #
 ### // stage0 ###
@@ -281,6 +286,7 @@ printf "\033[1;31mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 
 #/ check zfs send & receive transmission
+show "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
 (sleep 2) & spinner $!
 
