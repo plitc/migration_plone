@@ -194,7 +194,7 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 
 #/ stop plone
-
+show stop plone for: "$SOURCEJAIL"
 show "$(jailid)"
 #/ pkg install: ksh93
 #(pkginstall ksh93) & spinner $!
