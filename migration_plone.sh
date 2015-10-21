@@ -208,6 +208,7 @@ case "$1" in
 show "stop plone for: $SOURCEJAIL"
 jexec "$(jailid)" /usr/local/etc/rc.d/plone stop
 jexec "$(jailid)" /bin/sync
+(sleep 2) & spinner $!
 
 #/ take snapshot
 show "zfs snapshot for: $SOURCEJAIL"
@@ -224,7 +225,15 @@ checkping "$TARGETHOST"
 
 #/ zfs send & receive
 show "enter the password for the remote host zfs send & receive transmission"
+#/zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv -F "$TARGETZFSRECEIVE"
 zfs send "$(jailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
+if [ $? -eq 0 ]
+then
+   : # dummy
+else
+   echo "[ERROR] zfs send & receive failed!"
+   exit 1
+fi
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
