@@ -534,7 +534,13 @@ then
    jexec "$(tjailid)" wget http://launchpad.net/plone/5.0/5.0/+download/Plone-5.0-UnifiedInstaller.tgz
    (sleep 4) & spinner $!
 
-exit 1
+   #/ extract plone package
+   showyellow "extract plone 5 package for: $TARGETJAIL"
+   jexec "$(tjailid)" tar -xvf /root/Plone-5.0-UnifiedInstaller.tgz
+   #jexec "$(tjailid)" mv
+   (sleep 4) & spinner $!
+
+   exit 1
                                  #/ plone backup file transfer
                                     showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
                                        (sleep 5) & spinner $!
