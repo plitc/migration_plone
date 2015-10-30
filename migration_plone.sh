@@ -277,25 +277,25 @@ case "$1" in
 showyellow "stop plone for: $SOURCEJAIL"
 jexec "$(sjailid)" /usr/local/etc/rc.d/plone stop
 jexec "$(sjailid)" /bin/sync
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ take snapshot
 showyellow "zfs snapshot for: $SOURCEJAIL"
 zfs snapshot "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ start (old) plone
 showyellow "start plone for: $SOURCEJAIL"
 jexec "$(sjailid)" /usr/local/etc/rc.d/plone start
 jexec "$(sjailid)" /bin/sync
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ prepare zfs send & receive
 echo "" # dummy
 echo "ping test to remote host: $TARGETHOST"
 echo "" # dummy
 checkping "$TARGETHOST"
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ zfs send & receive
 showyellow "enter the password for the remote host zfs send & receive transmission"
@@ -309,7 +309,7 @@ else
    printf "\033[1;31mERROR: zfs send & receive failed!\033[0m\n"
    exit 1
 fi
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
@@ -332,33 +332,33 @@ printf "\033[1;32mMigration for (source) Plone finished.\033[0m\n"
 #/ check zfs send & receive transmission
 showyellow "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ check defined plone version
 checkploneversion "$TARGETPLONEVERSION"
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ do rollback
 showyellow "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ jail (base) update
 showyellow "jail update for: $TARGETJAIL"
 jexec "$(tjailid)" pkg update
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 #/ jail (base) upgrade
 showyellow "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
-(sleep 2) & spinner $!
+(sleep 4) & spinner $!
 
 if [ "$TARGETPLONEVERSION" = "4" ]
 then
    #/ install plone 4
    showyellow "install plone for: $TARGETJAIL"
    jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
-   (sleep 2) & spinner $!
+   (sleep 4) & spinner $!
 
    #/ fix: libiconv.so
    jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
