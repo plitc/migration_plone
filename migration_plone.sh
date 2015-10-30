@@ -475,7 +475,7 @@ ZOPECONFIG
    showyellow "start zope service for: $TARGETJAIL"
    jexec "$(tjailid)" service zope213 start
    (sleep 4) & spinner $!
-   jexec "$(tjailid)" "(sockstat -46 | grep zope)"
+   jexec "$(tjailid)" /bin/sh -c 'sockstat -46 | grep "www"'
    (sleep 4) & spinner $!
 
 
