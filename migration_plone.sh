@@ -334,6 +334,11 @@ printf "\033[1;32mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 
+#/ stop unclean zope
+showyellow "stop unclean (local) zope service for: $TARGETJAIL"
+jexec "$(tjailid)" service zope213 stop
+(sleep 4) & spinner $!
+
 #/ check zfs send & receive transmission
 showyellow "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
