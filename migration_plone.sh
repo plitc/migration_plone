@@ -271,7 +271,7 @@ newjailpath(){
 #// function: get new jail ip
 getnewjailip(){
    GETJAILIP=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $1}')
-   jexec "$GETJAILIP" /bin/sh -c 'ifconfig | egrep -v "127.0.0.1|inet6" | grep "inet" | awk '{print $2}''
+   jexec "$GETJAILIP" /bin/sh -c ''ifconfig | egrep -v "127.0.0.1|inet6" | grep "inet" | awk '{print $2}'''
 }
 #
 ### // stage0 ###
