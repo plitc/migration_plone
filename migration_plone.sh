@@ -391,6 +391,7 @@ then
 
    #/ move plone datastorage
    showyellow "move plone datastorage files"
+   jexec "$(tjailid)" rm -rf /usr/local/www/Zope213/var
    jexec "$(tjailid)" mv -f "$TARGETPLONEDIR"/zinstance/var /usr/local/www/Zope213
    jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
    (sleep 4) & spinner $!
@@ -449,6 +450,9 @@ effective-user www
     # "filestorage").
     path $INSTANCE/var/filestorage/Data.fs
   </filestorage>
+  <blobstorage>
+  blob-dir $INSTANCE/var/blobstorage
+  </blobstorage>
   mount-point /
 </zodb_db>
 
@@ -470,6 +474,7 @@ ZOPECONFIG
    #/ start zope
    showyellow "start zope service for: $TARGETJAIL"
    jexec "$(tjailid)" service zope213 start
+   jexec "$(tjailid)" "sockstat -46 | grep zope"
    (sleep 4) & spinner $!
 
 
