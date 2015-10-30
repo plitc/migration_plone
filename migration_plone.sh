@@ -445,15 +445,14 @@ effective-user www
 
 <zodb_db main>
   # Main FileStorage database
-  <filestorage>
-    # See .../ZODB/component.xml for directives (sectiontype
-    # "filestorage").
-    path $INSTANCE/var/filestorage/Data.fs
+  <blobstorage>
     blob-dir $INSTANCE/var/blobstorage
-  </filestorage>
-  #<blobstorage>
-  #  blob-dir $INSTANCE/var/blobstorage
-  #</blobstorage>
+    <filestorage>
+      # See .../ZODB/component.xml for directives (sectiontype
+      # "filestorage").
+      path $INSTANCE/var/filestorage/Data.fs
+    </filestorage>
+  </blobstorage>
   mount-point /
 </zodb_db>
 
