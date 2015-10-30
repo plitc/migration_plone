@@ -449,10 +449,11 @@ effective-user www
     # See .../ZODB/component.xml for directives (sectiontype
     # "filestorage").
     path $INSTANCE/var/filestorage/Data.fs
+    blob-dir $INSTANCE/var/blobstorage
   </filestorage>
-  <blobstorage>
-  blob-dir $INSTANCE/var/blobstorage
-  </blobstorage>
+  #<blobstorage>
+  #  blob-dir $INSTANCE/var/blobstorage
+  #</blobstorage>
   mount-point /
 </zodb_db>
 
