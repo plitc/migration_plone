@@ -252,7 +252,7 @@ checkzfsrecv(){
 plonetransmit(){
    TBKPATH=$(zfs list | grep -w "$TARGETZFSRECEIVE" | awk '{print $5}')
    TBKMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}')
-   cp -rf "$TBKPATH"/usr/local/Plone "$TBKMATCH"/usr/local/www
+   cp -rf "$TBKPATH""$SOURCEPLONEDIR" "$TBKMATCH""$TARGETPLONEDIR"
    if [ $? -eq 0 ]
    then
       : # dummy
@@ -372,6 +372,7 @@ then
    #/ plone backup file transfer
    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds"
    (sleep 5) & spinner $!
+   jexec "$(tjailid)" mkdir -p /usr/local/www
    (plonetransmit) & spinner $!
 
 
