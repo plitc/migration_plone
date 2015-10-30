@@ -165,6 +165,15 @@ fi
 }
 
 #// function: check read
+checkploneversion(){
+if [ -z "$@" ]; then
+   #/echo "[ERROR]"
+   printf "\033[1;31mERROR: Plone Version in config/settings.conf undefined!\033[0m\n"
+   exit 1
+fi
+}
+
+#// function: check read
 checkread(){
 if [ -z "$@" ]; then
    #/echo "[ERROR] nothing selected"
@@ -298,6 +307,10 @@ printf "\033[1;32mMigration for (source) Plone finished.\033[0m\n"
 #/ check zfs send & receive transmission
 show "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
+(sleep 2) & spinner $!
+
+#/ check defined plone version
+checkploneversion "$TARGETPLONEVERSION"
 (sleep 2) & spinner $!
 
 #/ do rollback
