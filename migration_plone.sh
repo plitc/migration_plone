@@ -492,7 +492,7 @@ ZOPECONFIG
 
    #/ recommendations
    echo "" # dummy
-   showred "dont forget:"
+   showred "do not forget:"
    echo "step 1 - http://'"$(getnewjailip)"':8080/Plone/uid_catalog/manage_catalogAdvanced"
    echo "step 2 - ZMI: ... Update Catalog ..."
    echo "step 3 - jexec '"$(tjailid)"' service zope213 restart"
@@ -510,12 +510,67 @@ fi
 
 if [ "$TARGETPLONEVERSION" = "5" ]
 then
-   #/ install plone 5
-   showyellow "currently not supported"
-   exit 1
+   #/ install sudo and wget
+   showyellow "install wget for: $TARGETJAIL"
+   jexec "$(tjailid)" pkg install -y sudo wget
+   (sleep 4) & spinner $!
+
+   #/ install plone 5 dependencies
+   showyellow "install plone 5 dependencies for: $TARGETJAIL"
+   jexec "$(tjailid)" pkg install -y libjpeg-turbo jpeg-turbo readline libxml2 libxslt wv poppler-utils
+   (sleep 4) & spinner $!
+
+   #/ fix: libiconv.so
+   jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
+
+   #/ fix: libutil.so
+   jexec "$(tjailid)" ln -s /lib/libutil.so.9 /lib/libutil.so.8
+
+   #/ fix: libz.so
+   jexec "$(tjailid)" ln -s /lib/libz.so.6 /lib/libz.so.5
+
+   #/ fetch plone package
+   showyellow "fetch plone 5 package for: $TARGETJAIL"
+   jexec "$(tjailid)" wget http://launchpad.net/plone/5.0/5.0/+download/Plone-5.0-UnifiedInstaller.tgz
+   (sleep 4) & spinner $!
+
+exit 1
+                                 #/ plone backup file transfer
+                                    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
+                                       (sleep 5) & spinner $!
+                                          jexec "$(tjailid)" mkdir -p /usr/local/www
+                                             (plonetransmit) & spinner $!
+                                                jexec "$(tjailid)" chown -R www:www "$TARGETPLONEDIR"
+                                                   (sleep 4) & spinner $!
+
+                                                      #/ create new zope instance
+                                                         showyellow "create an new zope instance for: $TARGETJAIL"
+                                                            jexec "$(tjailid)" /usr/local/bin/mkzopeinstance --dir /usr/local/www/Zope213/
+                                                               jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
+                                                                  jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/log
+                                                                     (sleep 4) & spinner $!
+
+                                                                        #/ move plone datastorage
+                                                                           showyellow "move plone datastorage files"
+                                                                              jexec "$(tjailid)" rm -rf /usr/local/www/Zope213/var
+                                                                                 jexec "$(tjailid)" mv -f "$TARGETPLONEDIR"/zinstance/var /usr/local/www/Zope213
+                                                                                    jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
+                                                                                       (sleep 4) & spinner $!
+
+                                                                                          #/ define zope service
+                                                                                             showyellow "define zope service for: $TARGETJAIL"
+                                                                                                jexec "$(tjailid)" sysrc zope213_enable="YES"
+                                                                                                   jexec "$(tjailid)" sysrc zope213_instances="/usr/local/www/Zope213"
+                                                                                                      jexec "$(tjailid)" cp -f /usr/local/www/Zope213/etc/zope.conf /usr/local/www/Zope213/etc/zope.conf.default
+                                                                                                         (sleep 4) & spinner $!
+
+                                                                                                            #/ define zope config
+                                                                                                               showyellow "define zope config for: $TARGETJAIL"
+                                                                                                                  #/jexec "$(tjailid)" cat << "ZOPECONFIG" > /usr/local/www/Zope213/etc/zope.conf
 
    #/ finished!
    showgreen "Migration finished"
+   cleanup
    exit 0
 else
    #/ unsupported plone
