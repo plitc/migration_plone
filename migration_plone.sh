@@ -481,6 +481,7 @@ ZOPECONFIG
 
    #/ finished!
    showgreen "Migration finished"
+   cleanup
    exit 0
 fi
 
