@@ -247,6 +247,21 @@ checkzfsrecv(){
       exit 1
    fi
 }
+
+#// function: plone backup transfer
+plonetransmit(){
+   TBKPATH=$(zfs list | grep -w "$TARGETZFSRECEIVE" | awk '{print $5}')
+   TBKMATCH=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}')
+   cp -rfv "$TBKPATH"/usr/local/Plone "$TBKMATCH"/usr/local/www
+   if [ $? -eq 0 ]
+   then
+      : # dummy
+   else
+      #/echo "[ERROR]"
+      printf "\033[1;31mERROR: can't copy old plone data to the new jail!\033[0m\n"
+      exit 1
+   fi
+}
 #
 ### // stage0 ###
 
@@ -345,11 +360,24 @@ then
    jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
    (sleep 2) & spinner $!
 
+   #/ fix: libiconv.so
+   jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
+
+   #/ fix: libutil.so
+   jexec "$(tjailid)" ln -s /lib/libutil.so.9 /lib/libutil.so.8
+
+   #/ fix: libz.so
+   jexec "$(tjailid)" ln -s /lib/libz.so.6 /lib/libz.so.5
+
+   #/ plone backup file transfer
+   showyellow "copy old plone files to the new jail: $TARGETJAIL"
+   (plonetransmit) & spinner $!
+
 
 
    #/ finished!
    showgreen "Migration finished"
-   # exit 0
+   exit 0
 fi
 
 if [ "$TARGETPLONEVERSION" = "5" ]
@@ -360,7 +388,7 @@ then
 
    #/ finished!
    showgreen "Migration finished"
-   # exit 0
+   exit 0
 else
    #/ unsupported plone
    showred "unsupported plone version defined"
@@ -370,7 +398,7 @@ fi
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
-cleanup
+cleanup # useless
 ### ### ### ### ### ### ### ### ###
 echo "" # printf
 printf "\033[1;32mMigration for (target) Plone finished.\033[0m\n"
