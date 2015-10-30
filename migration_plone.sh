@@ -384,6 +384,12 @@ then
    jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/log
    (sleep 4) & spinner $!
 
+   #/ move plone datastorage
+   showyellow "move plone datastorage files"
+   jexec "$(tjailid)" mv -f "$TARGETPLONEDIR"/zinstance/var /usr/local/www/Zope213/var
+   jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
+   (sleep 4) & spinner $!
+
 
 
    #/ finished!
