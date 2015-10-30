@@ -182,9 +182,19 @@ if [ -z "$@" ]; then
 fi
 }
 
-#// function: show shell info
-show(){
+#// function: showyellow shell info (green)
+showgreen(){
+   printf "\033[1;32m%s\033[0m\n" "$@"
+}
+
+#// function: showyellow shell info (yellow)
+showyellow(){
    printf "\033[1;33m%s\033[0m\n" "$@"
+}
+
+#// function: showyellow shell info (red)
+showred(){
+   printf "\033[1;31m%s\033[0m\n" "$@"
 }
 
 #// function: source jail id
@@ -249,18 +259,18 @@ case "$1" in
 ### ### ### ### ### ### ### ### ###
 
 #/ stop (old) plone
-show "stop plone for: $SOURCEJAIL"
+showyellow "stop plone for: $SOURCEJAIL"
 jexec "$(sjailid)" /usr/local/etc/rc.d/plone stop
 jexec "$(sjailid)" /bin/sync
 (sleep 2) & spinner $!
 
 #/ take snapshot
-show "zfs snapshot for: $SOURCEJAIL"
+showyellow "zfs snapshot for: $SOURCEJAIL"
 zfs snapshot "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE"
 (sleep 2) & spinner $!
 
 #/ start (old) plone
-show "start plone for: $SOURCEJAIL"
+showyellow "start plone for: $SOURCEJAIL"
 jexec "$(sjailid)" /usr/local/etc/rc.d/plone start
 jexec "$(sjailid)" /bin/sync
 (sleep 2) & spinner $!
@@ -273,7 +283,7 @@ checkping "$TARGETHOST"
 (sleep 2) & spinner $!
 
 #/ zfs send & receive
-show "enter the password for the remote host zfs send & receive transmission"
+showyellow "enter the password for the remote host zfs send & receive transmission"
 #/zfs send "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv -F "$TARGETZFSRECEIVE"
 zfs send "$(sjailmatch)"@"$SOURCESNAPSHOTSUFFIX""$DATE" | ssh -p "$TARGETSSHPORT" "$TARGETSSHUSER"@"$TARGETHOST" zfs recv "$TARGETZFSRECEIVE"
 if [ $? -eq 0 ]
@@ -305,7 +315,7 @@ printf "\033[1;32mMigration for (source) Plone finished.\033[0m\n"
 ### ### ### ### ### ### ### ### ###
 
 #/ check zfs send & receive transmission
-show "check zfs send & recv for: $TARGETJAIL"
+showyellow "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
 (sleep 2) & spinner $!
 
@@ -314,40 +324,48 @@ checkploneversion "$TARGETPLONEVERSION"
 (sleep 2) & spinner $!
 
 #/ do rollback
-show "zfs rollback for: $TARGETJAIL"
+showyellow "zfs rollback for: $TARGETJAIL"
 zfs rollback "$(tjailmatch)"@"$TARGETZFSROLLBACK"
 (sleep 2) & spinner $!
 
 #/ jail (base) update
-show "jail update for: $TARGETJAIL"
+showyellow "jail update for: $TARGETJAIL"
 jexec "$(tjailid)" pkg update
 (sleep 2) & spinner $!
 
 #/ jail (base) upgrade
-show "jail upgrade for: $TARGETJAIL"
+showyellow "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
 (sleep 2) & spinner $!
 
 if [ "$TARGETPLONEVERSION" = "4" ]
 then
    #/ install plone 4
-   show "install plone for: $TARGETJAIL"
+   showyellow "install plone for: $TARGETJAIL"
    jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
    (sleep 2) & spinner $!
+
+
+
+   #/ finished!
+   showgreen "Migration finished"
+   # exit 0
 fi
 
 if [ "$TARGETPLONEVERSION" = "5" ]
 then
    #/ install plone 5
-   show "currently not supported"
+   showyellow "currently not supported"
    exit 1
+
+   #/ finished!
+   showgreen "Migration finished"
+   # exit 0
 else
    #/ unsupported plone
-   show "unsupported plone version defined"
+   showred "unsupported plone version defined"
    exit 1
 fi
-
-
 
 ### ### ### ### ### ### ### ### ###
 ### ### ### ### ### ### ### ### ###
