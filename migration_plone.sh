@@ -374,6 +374,15 @@ then
    (sleep 5) & spinner $!
    jexec "$(tjailid)" mkdir -p /usr/local/www
    (plonetransmit) & spinner $!
+   jexec "$(tjailid)" chown -R www:www "$TARGETPLONEDIR"
+   (sleep 4) & spinner $!
+
+   #/ create new zope instance
+   showyellow "create an new zope instance for: $TARGETJAIL"
+   jexec "$(tjailid)" /usr/local/bin/mkzopeinstance --dir /usr/local/www/Zope213/
+   jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
+   jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/log
+   (sleep 4) & spinner $!
 
 
 
