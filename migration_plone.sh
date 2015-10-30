@@ -267,6 +267,12 @@ plonetransmit(){
 newjailpath(){
    jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}'
 }
+
+#// function: get new jail ip
+getnewjailip(){
+   GETJAILIP=$(jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $1}')
+   jexec "$GETJAILIP" /bin/sh -c 'ifconfig | egrep -v "127.0.0.1|inet6" | grep "inet" | awk '{print $2}''
+}
 #
 ### // stage0 ###
 
@@ -483,6 +489,16 @@ ZOPECONFIG
    showyellow "zope service for: $TARGETJAIL listen on port:"
    jexec "$(tjailid)" /bin/sh -c 'sockstat -46 | grep "www"'
    (sleep 4) & spinner $!
+
+   #/ recommendations
+   echo "" # dummy
+   echo 'dont forget:'
+   echo 'http://"$(getnewjailip)":8080/Plone/uid_catalog/manage_catalogAdvanced'
+   echo '... Update Catalog ...'
+   echo 'jexec "$(tjailid)" service zope213 restart'
+   echo 'http://"$(getnewjailip)":8080/Plone/portal_catalog/manage_catalogAdvanced'
+   echo '... Clear and Rebuild ...'
+   echo "" # dummy
 
 
 
