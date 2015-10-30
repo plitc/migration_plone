@@ -536,8 +536,14 @@ then
 
    #/ extract plone package
    showyellow "extract plone 5 package for: $TARGETJAIL"
-   jexec "$(tjailid)" tar -xvf /root/Plone-5.0-UnifiedInstaller.tgz
-   #jexec "$(tjailid)" mv
+   jexec "$(tjailid)" tar -xvf /Plone-5.0-UnifiedInstaller.tgz
+   jexec "$(tjailid)" mv -f /Plone-5.0-UnifiedInstaller /usr/local/plone_install
+   jexec "$(tjailid)" mkdir -p /usr/local/www/plone
+   (sleep 4) & spinner $!
+
+   #/ install plone
+   showyellow "install plone 5 package for: $TARGETJAIL"
+   jexec "$(tjailid)" /bin/sh -c 'cd /usr/local/plone_install; ./install.sh --target=/usr/local/www/plone standalone'
    (sleep 4) & spinner $!
 
    exit 1
