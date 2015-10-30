@@ -328,10 +328,24 @@ show "jail upgrade for: $TARGETJAIL"
 jexec "$(tjailid)" pkg upgrade -y
 (sleep 2) & spinner $!
 
-#/ install plone
-show "install plone for: $TARGETJAIL"
-jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
-(sleep 2) & spinner $!
+if [ "$TARGETPLONEVERSION" = "4" ]
+then
+   #/ install plone 4
+   show "install plone for: $TARGETJAIL"
+   jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml
+   (sleep 2) & spinner $!
+fi
+
+if [ "$TARGETPLONEVERSION" = "5" ]
+then
+   #/ install plone 5
+   show "currently not supported"
+   exit 1
+else
+   #/ unsupported plone
+   show "unsupported plone version defined"
+   exit 1
+fi
 
 
 
