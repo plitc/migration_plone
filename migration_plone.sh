@@ -375,7 +375,7 @@ then
    jexec "$(tjailid)" ln -s /lib/libz.so.6 /lib/libz.so.5
 
    #/ plone backup file transfer
-   showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ..."
+   showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
    (sleep 5) & spinner $!
    jexec "$(tjailid)" mkdir -p /usr/local/www
    (plonetransmit) & spinner $!
