@@ -262,6 +262,11 @@ plonetransmit(){
       exit 1
    fi
 }
+
+#// function: new jail path
+newjailpath(){
+   jls | grep -w "$TARGETJAIL" | grep -E '(^| )'"$TARGETJAIL"'( |$)' | awk '{print $4}'
+}
 #
 ### // stage0 ###
 
@@ -386,8 +391,85 @@ then
 
    #/ move plone datastorage
    showyellow "move plone datastorage files"
-   jexec "$(tjailid)" mv -f "$TARGETPLONEDIR"/zinstance/var /usr/local/www/Zope213/var
+   jexec "$(tjailid)" mv -f "$TARGETPLONEDIR"/zinstance/var /usr/local/www/Zope213
    jexec "$(tjailid)" chown -R www:www /usr/local/www/Zope213/var
+   (sleep 4) & spinner $!
+
+   #/ define zope service
+   showyellow "define zope service for: $TARGETJAIL"
+   jexec "$(tjailid)" sysrc zope213_enable="YES"
+   jexec "$(tjailid)" sysrc zope213_instances="/usr/local/www/Zope213"
+   jexec "$(tjailid)" cp -f /usr/local/www/Zope213/etc/zope.conf /usr/local/www/Zope213/etc/zope.conf.default
+   (sleep 4) & spinner $!
+
+   #/ define zope config
+   showyellow "define zope config for: $TARGETJAIL"
+   #/jexec "$(tjailid)" cat << "ZOPECONFIG" > /usr/local/www/Zope213/etc/zope.conf
+   cat << "ZOPECONFIG" > /tmp/migration_plone_zope.conf
+### ### ### ZOPE // ### ### ###
+
+%define INSTANCE /usr/local/www/Zope213
+instancehome $INSTANCE
+effective-user www
+
+<eventlog>
+  level info
+  <logfile>
+    path $INSTANCE/log/event.log
+    level info
+  </logfile>
+</eventlog>
+
+<logger access>
+  level WARN
+  <logfile>
+    path $INSTANCE/log/Z2.log
+    format %(message)s
+  </logfile>
+</logger>
+
+<http-server>
+  # valid keys are "address" and "force-connection-close"
+  address 8080
+
+  # force-connection-close on
+  #
+  # You can also use the WSGI interface between ZServer and ZPublisher:
+  # use-wsgi on
+  #
+  # To defer the opening of the HTTP socket until the end of the
+  # startup phase:
+  # fast-listen off
+</http-server>
+
+<zodb_db main>
+  # Main FileStorage database
+  <filestorage>
+    # See .../ZODB/component.xml for directives (sectiontype
+    # "filestorage").
+    path $INSTANCE/var/filestorage/Data.fs
+  </filestorage>
+  mount-point /
+</zodb_db>
+
+<zodb_db temporary>
+  # Temporary storage database (for sessions)
+  <temporarystorage>
+    name temporary storage for sessioning
+  </temporarystorage>
+  mount-point /temp_folder
+  container-class Products.TemporaryFolder.TemporaryContainer
+</zodb_db>
+
+### ### ### // ZOPE ### ### ###
+# EOF
+ZOPECONFIG
+   cp -f /tmp/migration_plone_zope.conf "$(newjailpath)"/usr/local/www/Zope213/etc/zope.conf
+   (sleep 4) & spinner $!
+
+   #/ start zope
+   showyellow "start zope service for: $TARGETJAIL"
+   jexec "$(tjailid)" service zope213 start
    (sleep 4) & spinner $!
 
 
