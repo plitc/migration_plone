@@ -493,11 +493,11 @@ ZOPECONFIG
    #/ recommendations
    echo "" # dummy
    showred "dont forget:"
-   echo "http://'"$(getnewjailip)"':8080/Plone/uid_catalog/manage_catalogAdvanced"
-   echo "... Update Catalog ..."
-   echo "jexec '"$(tjailid)"' service zope213 restart"
-   echo "http://'"$(getnewjailip)"':8080/Plone/portal_catalog/manage_catalogAdvanced"
-   echo "... Clear and Rebuild ..."
+   echo "step 1 - http://'"$(getnewjailip)"':8080/Plone/uid_catalog/manage_catalogAdvanced"
+   echo "step 2 - ZMI: ... Update Catalog ..."
+   echo "step 3 - jexec '"$(tjailid)"' service zope213 restart"
+   echo "step 4 - http://'"$(getnewjailip)"':8080/Plone/portal_catalog/manage_catalogAdvanced"
+   echo "step 5 - ZMI: ... Clear and Rebuild ..."
    echo "" # dummy
 
 
