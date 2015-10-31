@@ -532,6 +532,9 @@ LOGIN
    #/ fix: libz.so
    jexec "$(tjailid)" ln -s /lib/libz.so.6 /lib/libz.so.5
 
+   #/ fix: pdftotext
+   jexec "$(tjailid)" ln -s /usr/local/libexec/xpdf/pdftotext /usr/local/bin/pdftotext
+
    #/ plone backup file transfer
    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
    (sleep 5) & spinner $!
