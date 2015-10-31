@@ -460,7 +460,7 @@ default:\
          :copyright=/etc/COPYRIGHT:\
          :welcome=/etc/motd:\
          :setenv=MAIL=/var/mail/$,BLOCKSIZE=K:\
-         :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin ~/bin:\
+         :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin /usr/local/libexec/xpdf ~/bin:\
          :nologin=/var/run/nologin:\
          :cputime=unlimited:\
          :datasize=unlimited:\
