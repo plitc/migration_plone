@@ -421,10 +421,105 @@ if ($?prompt) then
         endif
 
 endif
+# EOF
 CSHRC
    cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/root/.cshrc
    cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/.cshrc
    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/local/bin/wvhtml
+   jexec "$(tjailid)" hash -r
+   (sleep 4) & spinner $!
+
+   #/ fix: PATH
+   cat << "LOGIN" > /tmp/migration_plone_login.conf
+# login.conf - login class capabilities database.
+#
+# Remember to rebuild the database after each change to this file:
+#
+#       cap_mkdb /etc/login.conf
+#
+# This file controls resource limits, accounting limits and
+# default user environment settings.
+#
+# $FreeBSD: releng/9.3/etc/login.conf 245415 2013-01-14 10:58:20Z zont $
+#
+
+# Default settings effectively disable resource limits, see the
+# examples below for a starting point to enable them.
+
+# defaults
+# These settings are used by login(1) by default for classless users
+# Note that entries like "cputime" set both "cputime-cur" and "cputime-max"
+#
+# Note that since a colon ':' is used to separate capability entries,
+# a \c escape sequence must be used to embed a literal colon in the
+# value or name of a capability (see the ``CGETNUM AND CGETSTR SYNTAX
+# AND SEMANTICS'' section of getcap(3) for more escape sequences).
+
+default:\
+         :passwd_format=sha512:\
+         :copyright=/etc/COPYRIGHT:\
+         :welcome=/etc/motd:\
+         :setenv=MAIL=/var/mail/$,BLOCKSIZE=K:\
+         :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin ~/bin:\
+         :nologin=/var/run/nologin:\
+         :cputime=unlimited:\
+         :datasize=unlimited:\
+         :stacksize=unlimited:\
+         :memorylocked=64K:\
+         :memoryuse=unlimited:\
+         :filesize=unlimited:\
+         :coredumpsize=unlimited:\
+         :openfiles=unlimited:\
+         :maxproc=unlimited:\
+         :sbsize=unlimited:\
+         :vmemoryuse=unlimited:\
+         :swapuse=unlimited:\
+         :pseudoterminals=unlimited:\
+         :priority=0:\
+         :ignoretime@:\
+         :umask=022:
+
+
+# A collection of common class names - forward them all to 'default'
+# (login would normally do this anyway, but having a class name
+#  here suppresses the diagnostic)
+#
+standard:\
+         :tc=default:
+xuser:\
+         :tc=default:
+staff:\
+         :tc=default:
+daemon:\
+         :memorylocked=64M:\
+         :tc=default:
+news:\
+         :tc=default:
+dialer:\
+         :tc=default:
+
+#
+# Root can always login
+#
+# N.B.  login_getpwclass(3) will use this entry for the root account,
+#       in preference to 'default'.
+root:\
+         :ignorenologin:\
+         :memorylocked=unlimited:\
+         :tc=default:
+
+#
+# Russian Users Accounts. Setup proper environment variables.
+#
+russian|Russian Users Accounts:\
+         :charset=KOI8-R:\
+         :lang=ru_RU.KOI8-R:\
+         :tc=default:
+
+# EOF
+LOGIN
+   cp -f /tmp/migration_plone_login.conf "$(newjailpath)"/etc/login.conf
+   jexec "$(tjailid)" cap_mkdb /etc/login.conf
    jexec "$(tjailid)" hash -r
    (sleep 4) & spinner $!
 
