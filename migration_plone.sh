@@ -534,6 +534,10 @@ LOGIN
 
    #/ fix: pdftotext
    jexec "$(tjailid)" ln -s /usr/local/libexec/xpdf/pdftotext /usr/bin/pdftotext
+   
+   #/ fix: wvHtml
+   jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvHtml
+   jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvhtml
 
    #/ plone backup file transfer
    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
