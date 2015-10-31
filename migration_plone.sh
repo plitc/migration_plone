@@ -423,6 +423,7 @@ if ($?prompt) then
 endif
 CSHRC
    cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/root/.cshrc
+   cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/.cshrc
    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/local/bin/wvhtml
    jexec "$(tjailid)" hash -r
    (sleep 4) & spinner $!
