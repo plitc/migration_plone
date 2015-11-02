@@ -668,6 +668,10 @@ ZOPECONFIG
    echo "LoadModule file_cache_module libexec/apache24/mod_file_cache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule cache_module libexec/apache24/mod_cache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule cache_disk_module libexec/apache24/mod_cache_disk.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule cache_socache_module libexec/apache24/mod_cache_socache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule socache_shmcb_module libexec/apache24/mod_socache_shmcb.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule socache_dbm_module libexec/apache24/mod_socache_dbm.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule socache_memcache_module libexec/apache24/mod_socache_memcache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "# / for PLONE" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    jexec "$(tjailid)" cp -f /usr/local/etc/apache24/extra/httpd-vhosts.conf /usr/local/etc/apache24/extra/httpd-vhosts.conf.default
    (sleep 4) & spinner $!
