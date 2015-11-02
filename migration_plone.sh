@@ -654,6 +654,12 @@ ZOPECONFIG
    showyellow "define apache24 service for: $TARGETJAIL"
    echo "# for PLONE /" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule proxy_connect_module libexec/apache24/mod_proxy_connect.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule proxy_http_module libexec/apache24/mod_proxy_http.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule proxy_balancer_module libexec/apache24/mod_proxy_balancer.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule session_module libexec/apache24/mod_session.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule session_cookie_module libexec/apache24/mod_session_cookie.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "# / for PLONE" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    jexec "$(tjailid)" cp -f /usr/local/etc/apache24/extra/httpd-vhosts.conf /usr/local/etc/apache24/extra/httpd-vhosts.conf.default
    (sleep 4) & spinner $!
@@ -732,6 +738,10 @@ APACHEVHOSTSCONFIG
    rm -f /tmp/migration_plone_apache_vhosts.conf
    (sleep 4) & spinner $!
 
+   #/ apache24 service check
+   showyellow "apache24 service check for: $TARGETJAIL"
+   jexec "$(tjailid)" apachectl configtest
+   (sleep 4) & spinner $!
 
 
 
