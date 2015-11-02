@@ -345,6 +345,11 @@ showyellow "stop unclean (local) zope service for: $TARGETJAIL"
 jexec "$(tjailid)" service zope213 onestop
 (sleep 4) & spinner $!
 
+#/ stop unclean apache24
+showyellow "stop unclean (local) apache24 service for: $TARGETJAIL"
+jexec "$(tjailid)" service apache24 onestop
+(sleep 4) & spinner $!
+
 #/ check zfs send & receive transmission
 showyellow "check zfs send & recv for: $TARGETJAIL"
 checkzfsrecv
