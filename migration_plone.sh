@@ -524,7 +524,7 @@ then
 ###    (sleep 4) & spinner $!
 
    #/ fix: libiconv.so
-   jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
+###   jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
 
    #/ fix: libutil.so
    jexec "$(tjailid)" ln -s /lib/libutil.so.9 /lib/libutil.so.8
@@ -537,7 +537,7 @@ then
 
    #/ fix: wvHtml
    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvHtml
-###    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvhtml
+###   jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvhtml
 
    #/ plone backup file transfer
    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
