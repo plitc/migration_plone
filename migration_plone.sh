@@ -376,152 +376,152 @@ then
    jexec "$(tjailid)" pkg install -y plone wv xpdf freetype2 ltxml graphviz
    (sleep 4) & spinner $!
 
-   #/ fix: PATH
-   cat << "CSHRC" > /tmp/migration_plone_cshrc
-# $FreeBSD: releng/9.3/etc/root/dot.cshrc 244005 2012-12-08 00:25:51Z eadler $
-#
-# .cshrc - csh resource script, read at beginning of execution by each shell
-#
-# see also csh(1), environ(7).
-# more examples available at /usr/share/examples/csh/
-#
+### #/ fix: PATH
+### cat << "CSHRC" > /tmp/migration_plone_cshrc
+### # $FreeBSD: releng/9.3/etc/root/dot.cshrc 244005 2012-12-08 00:25:51Z eadler $
+### #
+### # .cshrc - csh resource script, read at beginning of execution by each shell
+### #
+### # see also csh(1), environ(7).
+### # more examples available at /usr/share/examples/csh/
+### #
+###
+### alias h         history 25
+### alias j         jobs -l
+### alias la        ls -aF
+### alias lf        ls -FA
+### alias ll        ls -lAF
+###
+### # A righteous umask
+### umask 22
+###
+### set path = (/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin $HOME/bin /usr/local/libexec/xpdf)
+###
+### setenv  EDITOR  vi
+### setenv  PAGER   more
+### setenv  BLOCKSIZE       K
+###
+### if ($?prompt) then
+###         # An interactive shell -- set some stuff up
+###         set prompt = "%N@%m:%~ %# "
+###         set promptchars = "%#"
+###
+###         set filec
+###         set history = 1000
+###         set savehist = (1000 merge)
+###         set autolist = ambiguous
+###         # Use history to aid expansion
+###         set autoexpand
+###         set autorehash
+###         set mail = (/var/mail/$USER)
+###         if ( $?tcsh ) then
+###                 bindkey "^W" backward-delete-word
+###                 bindkey -k up history-search-backward
+###                 bindkey -k down history-search-forward
+###         endif
+###
+### endif
+### # EOF
+### CSHRC
+###    cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/root/.cshrc
+###    cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/.cshrc
+###    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/local/bin/wvhtml
+###    jexec "$(tjailid)" hash -r
+###    (sleep 4) & spinner $!
 
-alias h         history 25
-alias j         jobs -l
-alias la        ls -aF
-alias lf        ls -FA
-alias ll        ls -lAF
-
-# A righteous umask
-umask 22
-
-set path = (/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin $HOME/bin /usr/local/libexec/xpdf)
-
-setenv  EDITOR  vi
-setenv  PAGER   more
-setenv  BLOCKSIZE       K
-
-if ($?prompt) then
-        # An interactive shell -- set some stuff up
-        set prompt = "%N@%m:%~ %# "
-        set promptchars = "%#"
-
-        set filec
-        set history = 1000
-        set savehist = (1000 merge)
-        set autolist = ambiguous
-        # Use history to aid expansion
-        set autoexpand
-        set autorehash
-        set mail = (/var/mail/$USER)
-        if ( $?tcsh ) then
-                bindkey "^W" backward-delete-word
-                bindkey -k up history-search-backward
-                bindkey -k down history-search-forward
-        endif
-
-endif
-# EOF
-CSHRC
-   cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/root/.cshrc
-   cp -f /tmp/migration_plone_cshrc "$(newjailpath)"/.cshrc
-   jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/local/bin/wvhtml
-   jexec "$(tjailid)" hash -r
-   (sleep 4) & spinner $!
-
-   #/ fix: PATH
-   cat << "LOGIN" > /tmp/migration_plone_login.conf
-# login.conf - login class capabilities database.
-#
-# Remember to rebuild the database after each change to this file:
-#
-#       cap_mkdb /etc/login.conf
-#
-# This file controls resource limits, accounting limits and
-# default user environment settings.
-#
-# $FreeBSD: releng/9.3/etc/login.conf 245415 2013-01-14 10:58:20Z zont $
-#
-
-# Default settings effectively disable resource limits, see the
-# examples below for a starting point to enable them.
-
-# defaults
-# These settings are used by login(1) by default for classless users
-# Note that entries like "cputime" set both "cputime-cur" and "cputime-max"
-#
-# Note that since a colon ':' is used to separate capability entries,
-# a \c escape sequence must be used to embed a literal colon in the
-# value or name of a capability (see the ``CGETNUM AND CGETSTR SYNTAX
-# AND SEMANTICS'' section of getcap(3) for more escape sequences).
-
-default:\
-         :passwd_format=sha512:\
-         :copyright=/etc/COPYRIGHT:\
-         :welcome=/etc/motd:\
-         :setenv=MAIL=/var/mail/$,BLOCKSIZE=K:\
-         :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin /usr/local/libexec/xpdf ~/bin:\
-         :nologin=/var/run/nologin:\
-         :cputime=unlimited:\
-         :datasize=unlimited:\
-         :stacksize=unlimited:\
-         :memorylocked=64K:\
-         :memoryuse=unlimited:\
-         :filesize=unlimited:\
-         :coredumpsize=unlimited:\
-         :openfiles=unlimited:\
-         :maxproc=unlimited:\
-         :sbsize=unlimited:\
-         :vmemoryuse=unlimited:\
-         :swapuse=unlimited:\
-         :pseudoterminals=unlimited:\
-         :priority=0:\
-         :ignoretime@:\
-         :umask=022:
-
-
-# A collection of common class names - forward them all to 'default'
-# (login would normally do this anyway, but having a class name
-#  here suppresses the diagnostic)
-#
-standard:\
-         :tc=default:
-xuser:\
-         :tc=default:
-staff:\
-         :tc=default:
-daemon:\
-         :memorylocked=64M:\
-         :tc=default:
-news:\
-         :tc=default:
-dialer:\
-         :tc=default:
-
-#
-# Root can always login
-#
-# N.B.  login_getpwclass(3) will use this entry for the root account,
-#       in preference to 'default'.
-root:\
-         :ignorenologin:\
-         :memorylocked=unlimited:\
-         :tc=default:
-
-#
-# Russian Users Accounts. Setup proper environment variables.
-#
-russian|Russian Users Accounts:\
-         :charset=KOI8-R:\
-         :lang=ru_RU.KOI8-R:\
-         :tc=default:
-
-# EOF
-LOGIN
-   cp -f /tmp/migration_plone_login.conf "$(newjailpath)"/etc/login.conf
-   jexec "$(tjailid)" cap_mkdb /etc/login.conf
-   jexec "$(tjailid)" hash -r
-   (sleep 4) & spinner $!
+### #/ fix: PATH
+### cat << "LOGIN" > /tmp/migration_plone_login.conf
+### # login.conf - login class capabilities database.
+### #
+### # Remember to rebuild the database after each change to this file:
+### #
+### #       cap_mkdb /etc/login.conf
+### #
+### # This file controls resource limits, accounting limits and
+### # default user environment settings.
+### #
+### # $FreeBSD: releng/9.3/etc/login.conf 245415 2013-01-14 10:58:20Z zont $
+### #
+###
+### # Default settings effectively disable resource limits, see the
+### # examples below for a starting point to enable them.
+###
+### # defaults
+### # These settings are used by login(1) by default for classless users
+### # Note that entries like "cputime" set both "cputime-cur" and "cputime-max"
+### #
+### # Note that since a colon ':' is used to separate capability entries,
+### # a \c escape sequence must be used to embed a literal colon in the
+### # value or name of a capability (see the ``CGETNUM AND CGETSTR SYNTAX
+### # AND SEMANTICS'' section of getcap(3) for more escape sequences).
+###
+### default:\
+###          :passwd_format=sha512:\
+###          :copyright=/etc/COPYRIGHT:\
+###          :welcome=/etc/motd:\
+###          :setenv=MAIL=/var/mail/$,BLOCKSIZE=K:\
+###          :path=/sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/sbin /usr/local/bin /usr/local/libexec/xpdf ~/bin:\
+###          :nologin=/var/run/nologin:\
+###          :cputime=unlimited:\
+###          :datasize=unlimited:\
+###          :stacksize=unlimited:\
+###          :memorylocked=64K:\
+###          :memoryuse=unlimited:\
+###          :filesize=unlimited:\
+###          :coredumpsize=unlimited:\
+###          :openfiles=unlimited:\
+###          :maxproc=unlimited:\
+###          :sbsize=unlimited:\
+###          :vmemoryuse=unlimited:\
+###          :swapuse=unlimited:\
+###          :pseudoterminals=unlimited:\
+###          :priority=0:\
+###          :ignoretime@:\
+###          :umask=022:
+###
+###
+### # A collection of common class names - forward them all to 'default'
+### # (login would normally do this anyway, but having a class name
+### #  here suppresses the diagnostic)
+### #
+### standard:\
+###          :tc=default:
+### xuser:\
+###          :tc=default:
+### staff:\
+###          :tc=default:
+### daemon:\
+###          :memorylocked=64M:\
+###          :tc=default:
+### news:\
+###          :tc=default:
+### dialer:\
+###          :tc=default:
+###
+### #
+### # Root can always login
+### #
+### # N.B.  login_getpwclass(3) will use this entry for the root account,
+### #       in preference to 'default'.
+### root:\
+###          :ignorenologin:\
+###          :memorylocked=unlimited:\
+###          :tc=default:
+###
+### #
+### # Russian Users Accounts. Setup proper environment variables.
+### #
+### russian|Russian Users Accounts:\
+###          :charset=KOI8-R:\
+###          :lang=ru_RU.KOI8-R:\
+###          :tc=default:
+### 
+### # EOF
+### LOGIN
+###    cp -f /tmp/migration_plone_login.conf "$(newjailpath)"/etc/login.conf
+###    jexec "$(tjailid)" cap_mkdb /etc/login.conf
+###    jexec "$(tjailid)" hash -r
+###    (sleep 4) & spinner $!
 
    #/ fix: libiconv.so
    jexec "$(tjailid)" ln -s /usr/local/lib/libiconv.so.3 /usr/local/lib/libiconv.so.2
@@ -534,10 +534,10 @@ LOGIN
 
    #/ fix: pdftotext
    jexec "$(tjailid)" ln -s /usr/local/libexec/xpdf/pdftotext /usr/bin/pdftotext
-   
+
    #/ fix: wvHtml
    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvHtml
-   jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvhtml
+###    jexec "$(tjailid)" ln -s /usr/local/bin/wvHtml /usr/bin/wvhtml
 
    #/ plone backup file transfer
    showyellow "copy old plone files to the new jail: $TARGETJAIL ... in 5 seconds ... (it will take a long time)"
@@ -643,6 +643,97 @@ ZOPECONFIG
    showyellow "zope service for: $TARGETJAIL listen on port:"
    jexec "$(tjailid)" /bin/sh -c 'sockstat -46 | grep "www"'
    (sleep 4) & spinner $!
+
+   #/ install apache24 as reverse proxy
+   showyellow "install apache24 service for: $TARGETJAIL"
+   jexec "$(tjailid)" pkg install -y apache24
+   jexec "$(tjailid)" sysrc apache24_enable="YES"
+   (sleep 4) & spinner $!
+
+   #/ define apache24 service
+   showyellow "define apache24 service for: $TARGETJAIL"
+   echo "# for PLONE /" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "# / for PLONE" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   jexec "$(tjailid)" cp -f /usr/local/etc/apache24/extra/httpd-vhosts.conf /usr/local/etc/apache24/extra/httpd-vhosts.conf.default
+   (sleep 4) & spinner $!
+
+   #/ define apache24 vhosts config
+   showyellow "define apache24 vhosts config for: $TARGETJAIL"
+   cat << APACHEVHOSTSCONFIG > /tmp/migration_plone_apache_vhosts.conf
+### ### ### PLONE // ### ### ###
+
+## Virtual Hosts
+#
+# If you want to maintain multiple domains/hostnames on your
+# machine you can setup VirtualHost containers for them. Most configurations
+# use only name-based virtual hosts so the server doesn't need to worry about
+# IP addresses. This is indicated by the asterisks in the directives below.
+#
+# Please see the documentation at
+# <URL:http://httpd.apache.org/docs/2.2/vhosts/>
+# for further details before you try to setup virtual hosts.
+#
+# You may use the command line option '-S' to verify your virtual host
+# configuration.
+
+NameVirtualHost $(getnewjailip):80
+
+<VirtualHost $TARGETAPACHEVIRTUALHOSTFQDN:80>
+   ServerName $TARGETAPACHEVIRTUALHOSTFQDN
+   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
+   ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
+
+   ProxyPass / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
+   ProxyPassReverse / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
+
+   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
+   CacheEnable disk /
+
+   MCacheSize 524288
+   MCacheMaxObjectCount 100000
+   MCacheMinObjectSize 1
+   MCacheMaxObjectSize 200000
+
+   CacheLastModifiedFactor 0.1
+   CacheDefaultExpire 0.5
+   CacheDirLength 3
+
+   ExpiresActive On
+   expiresByType image/ief A3600
+   ExpiresByType image/tiff A3600
+   ExpiresByType image/bmp A3600
+   ExpiresByType image/gif A3600
+   ExpiresByType image/png A3600
+   ExpiresByType image/jpeg A3600
+   ExpiresByType image/x-cmu-raster A3600
+   ExpiresByType image/x-portable-anymap A3600
+   ExpiresByType image/x-portable-bitmap A3600
+   ExpiresByType image/x-portable-graymap A3600
+   ExpiresByType image/x-portable-pixmap A3600
+   ExpiresByType image/x-rgb  A3600
+   ExpiresByType image/x-xbitmap A3600
+   ExpiresByType image/x-xpixmap A3600
+   ExpiresByType image/x-xwindowdump A3600
+   ExpiresByType text/css A3600
+   ExpiresByType text/javascript A3600
+   ExpiresByType application/x-javascript A3600
+   ExpiresByType text/html A3600
+   ExpiresByType text/xml A3600
+
+   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
+   ServerSignature On
+</VirtualHost>
+
+### ### ### // PLONE ### ### ###
+# EOF
+APACHEVHOSTSCONFIG
+   cp -f /tmp/migration_plone_apache_vhosts.conf "$(newjailpath)"/usr/local/etc/apache24/extra/httpd-vhosts.conf
+   rm -f /tmp/migration_plone_apache_vhosts.conf
+   (sleep 4) & spinner $!
+
+
+
 
    #/ recommendations
    echo "" # dummy
