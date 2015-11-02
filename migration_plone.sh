@@ -660,6 +660,9 @@ ZOPECONFIG
    echo "LoadModule proxy_balancer_module libexec/apache24/mod_proxy_balancer.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule session_module libexec/apache24/mod_session.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule session_cookie_module libexec/apache24/mod_session_cookie.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule file_cache_module libexec/apache24/mod_file_cache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule cache_module libexec/apache24/mod_cache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule cache_disk_module libexec/apache24/mod_cache_disk.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "# / for PLONE" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    jexec "$(tjailid)" cp -f /usr/local/etc/apache24/extra/httpd-vhosts.conf /usr/local/etc/apache24/extra/httpd-vhosts.conf.default
    (sleep 4) & spinner $!
