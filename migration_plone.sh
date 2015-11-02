@@ -743,6 +743,11 @@ APACHEVHOSTSCONFIG
    jexec "$(tjailid)" apachectl configtest
    (sleep 4) & spinner $!
 
+   #/ start apache24 service
+   showyellow "start apache24 service for: $TARGETJAIL"
+   jexec "$(tjailid)" service apache24 start
+   (sleep 4) & spinner $!
+
 
 
    #/ recommendations
