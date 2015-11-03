@@ -658,6 +658,7 @@ ZOPECONFIG
    #/ define apache24 service
    showyellow "define apache24 service for: $TARGETJAIL"
    echo "# for PLONE /" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "ServerName $TARGETJAIL" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_connect_module libexec/apache24/mod_proxy_connect.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
@@ -700,14 +701,14 @@ ZOPECONFIG
 #/<VirtualHost $TARGETAPACHEVIRTUALHOSTFQDN:80>
 <VirtualHost *:80>
    ServerName $TARGETAPACHEVIRTUALHOSTFQDN
-   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
+#   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
    ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
 
    ProxyPass / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
    ProxyPassReverse / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
 
-   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
-   CacheEnable disk /
+#   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
+#   CacheEnable disk /
 
 #   MCacheSize 524288
 #   MCacheMaxObjectCount 100000
@@ -740,8 +741,8 @@ ZOPECONFIG
 #   ExpiresByType text/html A3600
 #   ExpiresByType text/xml A3600
 
-   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
-   ServerSignature On
+#   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
+#   ServerSignature On
 </VirtualHost>
 
 ### ### ### // PLONE ### ### ###
