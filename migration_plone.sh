@@ -660,6 +660,7 @@ ZOPECONFIG
    showyellow "define apache24 service for: $TARGETJAIL"
    echo "# for PLONE /" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "ServerName $TARGETJAIL" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "Listen 8080" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_connect_module libexec/apache24/mod_proxy_connect.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
@@ -698,8 +699,8 @@ ZOPECONFIG
 # configuration.
 
 #/NameVirtualHost $(getnewjailip):80
-
 #/<VirtualHost $TARGETAPACHEVIRTUALHOSTFQDN:80>
+
 <VirtualHost *:80>
    ServerName $TARGETAPACHEVIRTUALHOSTFQDN
 #   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
@@ -707,6 +708,52 @@ ZOPECONFIG
 
    ProxyPass / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
    ProxyPassReverse / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
+
+#   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
+#   CacheEnable disk /
+
+#   MCacheSize 524288
+#   MCacheMaxObjectCount 100000
+#   MCacheMinObjectSize 1
+#   MCacheMaxObjectSize 200000
+
+#   CacheLastModifiedFactor 0.1
+#   CacheDefaultExpire 0.5
+#   CacheDirLength 3
+
+#   ExpiresActive On
+#   expiresByType image/ief A3600
+#   ExpiresByType image/tiff A3600
+#   ExpiresByType image/bmp A3600
+#   ExpiresByType image/gif A3600
+#   ExpiresByType image/png A3600
+#   ExpiresByType image/jpeg A3600
+#   ExpiresByType image/x-cmu-raster A3600
+#   ExpiresByType image/x-portable-anymap A3600
+#   ExpiresByType image/x-portable-bitmap A3600
+#   ExpiresByType image/x-portable-graymap A3600
+#   ExpiresByType image/x-portable-pixmap A3600
+#   ExpiresByType image/x-rgb  A3600
+#   ExpiresByType image/x-xbitmap A3600
+#   ExpiresByType image/x-xpixmap A3600
+#   ExpiresByType image/x-xwindowdump A3600
+#   ExpiresByType text/css A3600
+#   ExpiresByType text/javascript A3600
+#   ExpiresByType application/x-javascript A3600
+#   ExpiresByType text/html A3600
+#   ExpiresByType text/xml A3600
+
+#   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
+#   ServerSignature On
+</VirtualHost>
+
+<VirtualHost *:8080>
+   ServerName $TARGETAPACHEVIRTUALHOSTFQDN
+#   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
+   ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
+
+   ProxyPass / http://127.0.0.1:8080/
+   ProxyPassReverse / http://127.0.0.1:8080/
 
 #   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
 #   CacheEnable disk /
