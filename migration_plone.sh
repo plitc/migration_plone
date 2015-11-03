@@ -662,7 +662,7 @@ ZOPECONFIG
    echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_connect_module libexec/apache24/mod_proxy_connect.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_http_module libexec/apache24/mod_proxy_http.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
-   echo "LoadModule proxy_balancer_module libexec/apache24/mod_proxy_balancer.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+###   echo "LoadModule proxy_balancer_module libexec/apache24/mod_proxy_balancer.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule session_module libexec/apache24/mod_session.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule session_cookie_module libexec/apache24/mod_session_cookie.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule file_cache_module libexec/apache24/mod_file_cache.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
