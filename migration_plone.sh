@@ -695,9 +695,10 @@ ZOPECONFIG
 # You may use the command line option '-S' to verify your virtual host
 # configuration.
 
-NameVirtualHost $(getnewjailip):80
+#/NameVirtualHost $(getnewjailip):80
 
-<VirtualHost $TARGETAPACHEVIRTUALHOSTFQDN:80>
+#/<VirtualHost $TARGETAPACHEVIRTUALHOSTFQDN:80>
+<VirtualHost *:80>
    ServerName $TARGETAPACHEVIRTUALHOSTFQDN
    ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
    ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
