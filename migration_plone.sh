@@ -601,7 +601,8 @@ effective-user www
 
 <http-server>
   # valid keys are "address" and "force-connection-close"
-  address 8080
+  #/address 8080
+  address 127.0.0.1:8080
 
   # force-connection-close on
   #
