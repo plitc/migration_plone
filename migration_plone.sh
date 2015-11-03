@@ -660,7 +660,7 @@ ZOPECONFIG
    showyellow "define apache24 service for: $TARGETJAIL"
    echo "# for PLONE /" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "ServerName $TARGETJAIL" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
-   echo "Listen 8080" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+###   echo "Listen 8080" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule rewrite_module libexec/apache24/mod_rewrite.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
