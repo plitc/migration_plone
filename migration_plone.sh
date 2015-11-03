@@ -662,6 +662,7 @@ ZOPECONFIG
    echo "ServerName $TARGETJAIL" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Listen 8080" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "Include etc/apache24/extra/httpd-vhosts.conf" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
+   echo "LoadModule rewrite_module libexec/apache24/mod_rewrite.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_module libexec/apache24/mod_proxy.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_connect_module libexec/apache24/mod_proxy_connect.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
    echo "LoadModule proxy_http_module libexec/apache24/mod_proxy_http.so" >> "$(newjailpath)"/usr/local/etc/apache24/httpd.conf
@@ -709,6 +710,16 @@ ZOPECONFIG
    ProxyPass / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
    ProxyPassReverse / http://127.0.0.1:8080/VirtualHostBase/http/$TARGETAPACHEVIRTUALHOSTFQDN:80/Plone/VirtualHostRoot/
 
+    ProxyVia On
+    # prevent your web server from being used as global HTTP proxy
+    <LocationMatch "^[^/]">
+       Deny from all
+    </LocationMatch>
+    <Proxy *>
+       Order deny,allow
+       Allow from all
+    </Proxy>
+
 #   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
 #   CacheEnable disk /
 
@@ -754,6 +765,16 @@ ZOPECONFIG
 
    ProxyPass / http://127.0.0.1:8080/
    ProxyPassReverse / http://127.0.0.1:8080/
+
+   ProxyVia On
+   # prevent your web server from being used as global HTTP proxy
+   <LocationMatch "^[^/]">
+      Deny from all
+   </LocationMatch>
+   <Proxy *>
+      Order deny,allow
+      Allow from all
+   </Proxy>
 
 #   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
 #   CacheEnable disk /
