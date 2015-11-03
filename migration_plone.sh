@@ -717,27 +717,27 @@ NameVirtualHost $(getnewjailip):80
 #   CacheDefaultExpire 0.5
 #   CacheDirLength 3
 
-   ExpiresActive On
-   expiresByType image/ief A3600
-   ExpiresByType image/tiff A3600
-   ExpiresByType image/bmp A3600
-   ExpiresByType image/gif A3600
-   ExpiresByType image/png A3600
-   ExpiresByType image/jpeg A3600
-   ExpiresByType image/x-cmu-raster A3600
-   ExpiresByType image/x-portable-anymap A3600
-   ExpiresByType image/x-portable-bitmap A3600
-   ExpiresByType image/x-portable-graymap A3600
-   ExpiresByType image/x-portable-pixmap A3600
-   ExpiresByType image/x-rgb  A3600
-   ExpiresByType image/x-xbitmap A3600
-   ExpiresByType image/x-xpixmap A3600
-   ExpiresByType image/x-xwindowdump A3600
-   ExpiresByType text/css A3600
-   ExpiresByType text/javascript A3600
-   ExpiresByType application/x-javascript A3600
-   ExpiresByType text/html A3600
-   ExpiresByType text/xml A3600
+#   ExpiresActive On
+#   expiresByType image/ief A3600
+#   ExpiresByType image/tiff A3600
+#   ExpiresByType image/bmp A3600
+#   ExpiresByType image/gif A3600
+#   ExpiresByType image/png A3600
+#   ExpiresByType image/jpeg A3600
+#   ExpiresByType image/x-cmu-raster A3600
+#   ExpiresByType image/x-portable-anymap A3600
+#   ExpiresByType image/x-portable-bitmap A3600
+#   ExpiresByType image/x-portable-graymap A3600
+#   ExpiresByType image/x-portable-pixmap A3600
+#   ExpiresByType image/x-rgb  A3600
+#   ExpiresByType image/x-xbitmap A3600
+#   ExpiresByType image/x-xpixmap A3600
+#   ExpiresByType image/x-xwindowdump A3600
+#   ExpiresByType text/css A3600
+#   ExpiresByType text/javascript A3600
+#   ExpiresByType application/x-javascript A3600
+#   ExpiresByType text/html A3600
+#   ExpiresByType text/xml A3600
 
    CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
    ServerSignature On
@@ -753,6 +753,12 @@ APACHEVHOSTSCONFIG
    #/ apache24 service check
    showyellow "apache24 service check for: $TARGETJAIL"
    jexec "$(tjailid)" apachectl configtest
+   if [ $? -eq 0 ]
+   then
+      showgreen " OK "
+   else
+      showred " Failed "
+   fi
    (sleep 4) & spinner $!
 
    #/ start apache24 service
