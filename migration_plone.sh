@@ -601,8 +601,8 @@ effective-user www
 
 <http-server>
   # valid keys are "address" and "force-connection-close"
-  #/address 8080
-  address 127.0.0.1:8080
+  address 8080
+  #/address 127.0.0.1:8080
 
   # force-connection-close on
   #
@@ -758,61 +758,61 @@ ZOPECONFIG
 #   ServerSignature On
 </VirtualHost>
 
-<VirtualHost *:8080>
-   ServerName $TARGETAPACHEVIRTUALHOSTFQDN
-#   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
-   ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
-
-   ProxyPass / http://127.0.0.1:8080/
-   ProxyPassReverse / http://127.0.0.1:8080/
-
-   ProxyVia On
-   # prevent your web server from being used as global HTTP proxy
-   <LocationMatch "^[^/]">
-      Deny from all
-   </LocationMatch>
-   <Proxy *>
-      Order deny,allow
-      Allow from all
-   </Proxy>
-
-#   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
-#   CacheEnable disk /
-
-#   MCacheSize 524288
-#   MCacheMaxObjectCount 100000
-#   MCacheMinObjectSize 1
-#   MCacheMaxObjectSize 200000
-
-#   CacheLastModifiedFactor 0.1
-#   CacheDefaultExpire 0.5
-#   CacheDirLength 3
-
-#   ExpiresActive On
-#   expiresByType image/ief A3600
-#   ExpiresByType image/tiff A3600
-#   ExpiresByType image/bmp A3600
-#   ExpiresByType image/gif A3600
-#   ExpiresByType image/png A3600
-#   ExpiresByType image/jpeg A3600
-#   ExpiresByType image/x-cmu-raster A3600
-#   ExpiresByType image/x-portable-anymap A3600
-#   ExpiresByType image/x-portable-bitmap A3600
-#   ExpiresByType image/x-portable-graymap A3600
-#   ExpiresByType image/x-portable-pixmap A3600
-#   ExpiresByType image/x-rgb  A3600
-#   ExpiresByType image/x-xbitmap A3600
-#   ExpiresByType image/x-xpixmap A3600
-#   ExpiresByType image/x-xwindowdump A3600
-#   ExpiresByType text/css A3600
-#   ExpiresByType text/javascript A3600
-#   ExpiresByType application/x-javascript A3600
-#   ExpiresByType text/html A3600
-#   ExpiresByType text/xml A3600
-
-#   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
-#   ServerSignature On
-</VirtualHost>
+### <VirtualHost *:8080>
+###    ServerName $TARGETAPACHEVIRTUALHOSTFQDN
+### #   ServerAlias $TARGETAPACHEVIRTUALHOSTFQDN
+###    ServerAdmin admin@$TARGETAPACHEVIRTUALHOSTFQDN
+### 
+###    ProxyPass / http://127.0.0.1:8080/
+###    ProxyPassReverse / http://127.0.0.1:8080/
+### 
+###    ProxyVia On
+###    # prevent your web server from being used as global HTTP proxy
+###    <LocationMatch "^[^/]">
+###       Deny from all
+###    </LocationMatch>
+###    <Proxy *>
+###       Order deny,allow
+###       Allow from all
+###    </Proxy>
+### 
+### #   CacheRoot "/var/cache/$TARGETAPACHEVIRTUALHOSTFQDN"
+### #   CacheEnable disk /
+### 
+### #   MCacheSize 524288
+### #   MCacheMaxObjectCount 100000
+### #   MCacheMinObjectSize 1
+### #   MCacheMaxObjectSize 200000
+### 
+### #   CacheLastModifiedFactor 0.1
+### #   CacheDefaultExpire 0.5
+### #   CacheDirLength 3
+### 
+### #   ExpiresActive On
+### #   expiresByType image/ief A3600
+### #   ExpiresByType image/tiff A3600
+### #   ExpiresByType image/bmp A3600
+### #   ExpiresByType image/gif A3600
+### #   ExpiresByType image/png A3600
+### #   ExpiresByType image/jpeg A3600
+### #   ExpiresByType image/x-cmu-raster A3600
+### #   ExpiresByType image/x-portable-anymap A3600
+### #   ExpiresByType image/x-portable-bitmap A3600
+### #   ExpiresByType image/x-portable-graymap A3600
+### #   ExpiresByType image/x-portable-pixmap A3600
+### #   ExpiresByType image/x-rgb  A3600
+### #   ExpiresByType image/x-xbitmap A3600
+### #   ExpiresByType image/x-xpixmap A3600
+### #   ExpiresByType image/x-xwindowdump A3600
+### #   ExpiresByType text/css A3600
+### #   ExpiresByType text/javascript A3600
+### #   ExpiresByType application/x-javascript A3600
+### #   ExpiresByType text/html A3600
+### #   ExpiresByType text/xml A3600
+### 
+### #   CustomLog "/var/log/$TARGETAPACHEVIRTUALHOSTFQDN-access_log" common
+### #   ServerSignature On
+### </VirtualHost>
 
 ### ### ### // PLONE ### ### ###
 # EOF
