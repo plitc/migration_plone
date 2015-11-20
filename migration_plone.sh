@@ -842,14 +842,16 @@ APACHEVHOSTSCONFIG
    #/ recommendations
    echo "" # dummy
    showred "do not forget:"
-   echo "step 0 - APACHERPROXY: http://'"$TARGETAPACHEVIRTUALHOSTFQDN"':8080"
-   echo "step 1 - http://'"$(getnewjailip)"':8080/Plone/uid_catalog/manage_catalogAdvanced"
+   echo "step 0 - APACHERPROXY: ... Login ..."
+   echo "step 1 - http://$(echo "$TARGETAPACHEVIRTUALHOSTFQDN"):8080"
    echo "step 2 - ZMI: ... Update Catalog ..."
-   echo "step 3 - jexec '"$(tjailid)"' service zope213 restart"
-   echo "step 4 - http://'"$(getnewjailip)"':8080/Plone/portal_catalog/manage_catalogAdvanced"
+   echo "step 3 - http://$(getnewjailip):8080/Plone/uid_catalog/manage_catalogAdvanced"
+   echo "step 4 - jexec $(tjailid) service zope213 restart"
    echo "step 5 - ZMI: ... Clear and Rebuild ..."
-   echo "step 6 - http://'"$(getnewjailip)"':8080/Plone/@@plone-upgrade"
-   echo "step 7 - ZMI: ... Upgrade your Plone Instance ..."
+   echo "step 6 - http://$(getnewjailip):8080/Plone/portal_catalog/manage_catalogAdvanced"
+   echo "step 7 - jexec $(tjailid) service zope213 restart"
+   echo "step 8 - ZMI: ... Upgrade your Plone Instance ..."
+   echo "step 9 - http://$(getnewjailip):8080/Plone/@@plone-upgrade"
    echo "" # dummy
 
 
