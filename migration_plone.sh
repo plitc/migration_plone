@@ -842,8 +842,11 @@ APACHEVHOSTSCONFIG
    #/ recommendations
    echo "" # dummy
    showred "do not forget:"
-   echo "step 0 - APACHERPROXY: ... Login ..."
-   echo "step 1 - http://$(echo "$TARGETAPACHEVIRTUALHOSTFQDN"):8080"
+   echo "step 0 - FQDN APACHERPROXY: ... Login ... or"
+   echo "step 0 - http://$(echo "$TARGETAPACHEVIRTUALHOSTFQDN"):8080"
+   echo "" # dummy
+   echo "step 0 - ZOPE IP: ... Login ..."
+   echo "step 1 - http://$(getnewjailip):8080/Plone/uid_catalog/manage_catalogAdvanced"
    echo "step 2 - ZMI: ... Update Catalog ..."
    echo "step 3 - http://$(getnewjailip):8080/Plone/uid_catalog/manage_catalogAdvanced"
    echo "step 4 - jexec $(tjailid) service zope213 restart"
