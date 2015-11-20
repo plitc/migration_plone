@@ -848,6 +848,8 @@ APACHEVHOSTSCONFIG
    echo "step 3 - jexec '"$(tjailid)"' service zope213 restart"
    echo "step 4 - http://'"$(getnewjailip)"':8080/Plone/portal_catalog/manage_catalogAdvanced"
    echo "step 5 - ZMI: ... Clear and Rebuild ..."
+   echo "step 6 - http://'"$(getnewjailip)"':8080/Plone/@@plone-upgrade"
+   echo "step 7 - ZMI: ... Upgrade your Plone Instance ..."
    echo "" # dummy
 
 
