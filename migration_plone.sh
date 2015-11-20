@@ -857,7 +857,11 @@ APACHEVHOSTSCONFIG
    echo "step 9 - http://$(getnewjailip):8080/Plone/@@plone-upgrade"
    echo "" # dummy
 
-
+   #/ fixes
+   echo "BUG: TypeError('object.__new__(TTWViewlet) is not safe, use Persistence.Persistent.__new__()',) (Also, the following error occurred while attempting to render the standard error message, please see the event log for full details: object.__new__(TTWViewlet) is not safe, use Persistence.Persistent.__new__())"
+   echo "FIX: Line 32 in /usr/local/lib/python2.7/site-packages/plonetheme/sunburst/skins/sunburst_templates/main_template.pt"
+   echo "RUN: jexec $(tjailid) service zope213 restart"
+   echo "" # dummy
 
    #/ finished!
    showgreen "Migration finished"
